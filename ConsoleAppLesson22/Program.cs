@@ -8,17 +8,20 @@ namespace ConsoleAppLesson22
 {
     internal class Program
     {
-        static int Sum(int[] arr)
+        static void Sum(int[] arr)
         {
             int sum = 0;
             foreach (int a in arr)
             {
                 sum += a;
             }
-            return sum;
+            Console.WriteLine("Сумма = {0}", sum);
         }
-        static int Max(int[] arr)
-        { return arr.Max(); }
+        static void Max(Task t, object obj)
+        {
+            int[] arr = (int[])obj; // Уууу! Блин! Работает...
+            Console.WriteLine("Максимум = {0}", arr.Max()); 
+        }
 
 
         
@@ -41,13 +44,13 @@ namespace ConsoleAppLesson22
                 Console.Write(' ');
             }
             Console.WriteLine();
-            Console.WriteLine("Сумма");
-            Console.WriteLine(Sum(array));
-            Console.WriteLine("Максимум"); 
-            Console.WriteLine(Max(array));
 
+            Task task = new Task(() => Sum(array));
 
+            Action<Task, object> action2 = new Action<Task, object>(Max); 
+            Task task2 = task.ContinueWith(action2, array);
 
+            task.Start();
 
             Console.ReadKey();
         }
